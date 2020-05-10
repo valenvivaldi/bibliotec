@@ -1,0 +1,11 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "esquema basico, siguendo la metodologia del curso, con el objetivo de ser base para un poyecto proximo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Valentin Vivaldi",
+  "license": "MIT"
+}
