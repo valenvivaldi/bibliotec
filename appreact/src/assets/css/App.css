@@ -1,7 +1,11 @@
+
 body {
+  
   margin: 0%;
   padding: 0%;
   text-align: center;
+  background-color: rgb(2, 192, 84);
+
 
 
 
@@ -20,8 +24,18 @@ body {
 }
 
 #navbar {
-  background-color: rgb(0, 62, 177);
+  
   height: 60px;
+
+  /* gradiente */
+background: rgba(11, 163, 0, 1);
+background: -moz-radial-gradient(center, ellipse cover, rgba(11, 163, 0, 1) 0%, rgba(13, 135, 6, 1) 100%);
+background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(11, 163, 0, 1)), color-stop(100%, rgba(13, 135, 6, 1)));
+background: -webkit-radial-gradient(center, ellipse cover, rgba(11, 163, 0, 1) 0%, rgba(13, 135, 6, 1) 100%);
+background: -o-radial-gradient(center, ellipse cover, rgba(11, 163, 0, 1) 0%, rgba(13, 135, 6, 1) 100%);
+background: -ms-radial-gradient(center, ellipse cover, rgba(11, 163, 0, 1) 0%, rgba(13, 135, 6, 1) 100%);
+background: radial-gradient(ellipse at center, rgba(11, 163, 0, 1) 0%, rgba(13, 135, 6, 1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0ba300', endColorstr='#0d8706', GradientType=1);
 }
 
 #brand {
@@ -84,10 +98,14 @@ body {
 }
 
 .content {
-  background-color: #ccc;
+  /* background-color: #ccc; */
+  background-color:rgba(0, 0, 0, 0.103);
+
+;
   margin-top: 0px;
   padding-top: 1px;
   width: 100%;
+  min-height: 580px;
 }
 
 .searchForm {
