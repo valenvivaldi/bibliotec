@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import Global from "../Global";
 import Book from "./Book";
+import loading from "../assets/images/loading.gif";
 
 class BookDisplay extends Component {
   searchBarRef = new React.createRef();
@@ -32,21 +33,22 @@ class BookDisplay extends Component {
       route = "book/search/" + searchTerm;
     }
     console.log("axios va a hacer get en " + Global.url + route);
-
-    axios
-      .get(Global.url + route)
-      .then((res) => {
-        console.log("recibio el get! el primer libro es " + res.data[0].title);
-        this.setState({
-          books: res.data,
-          page: 1,
-          status: "success",
+    this.setState({ status: "loading" }, () => {
+      axios
+        .get(Global.url + route)
+        .then((res) => {
+          console.log("recibio el get! el primer libro es " + res.data);
+          this.setState({
+            books: res.data,
+            page: 1,
+            status: "success",
+          });
+        })
+        .catch((err) => {
+          this.setState({ status: "error" });
+          console.log(err);
         });
-      })
-      .catch((err) => {
-        this.setState({ status: "error" });
-        console.log(err);
-      });
+    });
   };
 
   nextPage = (e) => {
@@ -58,9 +60,9 @@ class BookDisplay extends Component {
     this.changePage(-1);
   };
 
-  changePage(i){
-    this.setState({page:this.state.page+i});
-  };
+  changePage(i) {
+    this.setState({ page: this.state.page + i });
+  }
 
   render() {
     return (
@@ -76,6 +78,11 @@ class BookDisplay extends Component {
         </form>
 
         <hr />
+        {this.state.status === "loading" && (
+          <img src={loading} alt="Cargando.." className="  loadingGif"></img>
+        )}
+
+        {this.state.books.length ==0 &&this.state.status==='success' && <p>No hay resultados correspondientes a esa busqueda.</p>}
         <section className="bookList">
           {this.state.books
             .slice(
@@ -86,6 +93,7 @@ class BookDisplay extends Component {
               return <Book key={book.idOld} data={book} />;
             })}
         </section>
+
         <div className="pageBar">
           {this.state.page > 1 && (
             <input
