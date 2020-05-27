@@ -7,6 +7,8 @@ class BookDisplay extends Component {
   searchBarRef = new React.createRef();
   state = {
     books: [],
+    page: 1,
+    pageLength: 50,
     status: null,
   };
 
@@ -34,9 +36,10 @@ class BookDisplay extends Component {
     axios
       .get(Global.url + route)
       .then((res) => {
-        console.log('recibio el get! el primer libro es '+res.data[0].title);
+        console.log("recibio el get! el primer libro es " + res.data[0].title);
         this.setState({
           books: res.data,
+          page: 1,
           status: "success",
         });
       })
@@ -46,20 +49,64 @@ class BookDisplay extends Component {
       });
   };
 
+  nextPage = (e) => {
+    e.preventDefault();
+    this.changePage(1);
+  };
+  backPage = (e) => {
+    e.preventDefault();
+    this.changePage(-1);
+  };
+
+  changePage(i){
+    this.setState({page:this.state.page+i});
+  };
+
   render() {
     return (
       <React.Fragment>
-        <form className='searchForm' onSubmit={this.doSearch}>
-          <input type="text" className ='searchBar' name="search" ref={this.searchBarRef} />
-          <input type='submit' className='searchButton' value='Buscar'></input>
+        <form className="searchForm" onSubmit={this.doSearch}>
+          <input
+            type="text"
+            className="searchBar"
+            name="search"
+            ref={this.searchBarRef}
+          />
+          <input type="submit" className="searchButton" value="Buscar"></input>
         </form>
 
         <hr />
         <section className="bookList">
-          {this.state.books.map((book, i) => {
-            return <Book key={book.idOld} data={book} />;
-          })}
+          {this.state.books
+            .slice(
+              this.state.pageLength * (this.state.page - 1),
+              this.state.pageLength * this.state.page
+            )
+            .map((book, i) => {
+              return <Book key={book.idOld} data={book} />;
+            })}
         </section>
+        <div className="pageBar">
+          {this.state.page > 1 && (
+            <input
+              type="button"
+              className="pageButtons"
+              name="back"
+              value="<"
+              onClick={this.backPage}
+            ></input>
+          )}
+          {this.state.page * this.state.pageLength <
+            this.state.books.length && (
+            <input
+              type="button"
+              className="pageButtons"
+              name="next"
+              value=">"
+              onClick={this.nextPage}
+            ></input>
+          )}
+        </div>
       </React.Fragment>
     );
   }

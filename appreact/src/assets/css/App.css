@@ -127,3 +127,35 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0ba300', endC
 .footer{
   font-size: small;
 }
+
+.formUpload {
+  
+  width: 40%;
+  margin: auto;
+  margin-top: 10px;
+  /* background: red; */
+  border-style: solid;
+  border-width: 1px;
+  height: 150px
+}
+
+.inputExcelFile {
+  /* background-color: blue; */
+  margin-top: 0px;
+  display: block;
+  height: 100%;
+  margin-top: -68px;
+  width: 100%;
+   opacity: 0%;
+}
+
+.formUpload input[type='submit']{
+  margin-top: 10px;
+}
+
+.pmessage{
+  margin-top: 40px;
+}
+.pageButtons{
+  margin: 5px;
+}
