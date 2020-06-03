@@ -6,18 +6,24 @@ var fs = require("fs");
 
 var controller = {
   all: (req, res) => {
-    var books = Book.find()
-      .sort({ uploadDate: -1 })
-      // .limit(10)
-      .exec((err, data) => {
-        if (err) {
-          return res
-            .status(404)
-            .send({ message: "error al solicitar todos los libros" });
-        } else {
-          res.status(200).send(data);
-        }
-      });
+    var query = Book.find().sort({ uploadDate: -1 });
+    var page = parseInt(req.query.page);
+    var perPage = parseInt(req.query.perPage);
+
+    if (page !== undefined && perPage !== undefined) {
+      query.skip(page * perPage).limit(perPage);
+    }
+
+    var books = query.exec((err, data) => {
+      if (err) {
+        console.log(err);
+        return res
+          .status(404)
+          .send({ message: "error al solicitar todos los libros" });
+      } else {
+        res.status(200).send(data);
+      }
+    });
   },
 
   test: (req, res) => {
@@ -33,7 +39,6 @@ var controller = {
     var file_name = "Archivo no subido";
 
     if (!req.files) {
-      console.log(req.files);
       res.status(404).send({
         status: "error",
         message: "no llego el archivo :(",
@@ -63,7 +68,6 @@ var controller = {
                 "no se encontro elementos en la base de datos, se carga desde el inicio"
               );
             }
-            console.log();
 
             var books = extractNewBooks(workbook, lastOldId);
             if (books.length == 0) {
@@ -88,12 +92,12 @@ var controller = {
               }
             });
           });
-      }else{
-          res.status(404).send({
-              status:'error',
-              message:'el archivo seleccionado no es un excel!!!'
-          });
-      };
+      } else {
+        res.status(404).send({
+          status: "error",
+          message: "el archivo seleccionado no es un excel!!!",
+        });
+      }
       fs.unlinkSync(file_path);
     }
   },
@@ -101,7 +105,7 @@ var controller = {
   search: (req, res) => {
     var searchTerm = req.params.searchTerm;
 
-    var books = Book.find({
+    var query = Book.find({
       $or: [
         {
           title: {
@@ -134,22 +138,82 @@ var controller = {
           },
         },
       ],
-    })
-      .sort({
-        uploadDate: -1,
-      })
-      .exec((err, data) => {
-        if (err) {
-          return res.status(404).send({
-            message: "error trayendo los libros correspondientes a la busqueda",
-          });
-        } else {
-          return res.status(200).send(data);
-        }
+    }).sort({
+      uploadDate: -1,
+    });
+
+    var page = parseInt(req.query.page);
+    var perPage = parseInt(req.query.perPage);
+
+    if (page !== undefined && perPage !== undefined) {
+      query.skip(page * perPage).limit(perPage);
+    }
+
+    var books = query.exec((err, data) => {
+      if (err) {
+        return res.status(404).send({
+          message: "error trayendo los libros correspondientes a la busqueda",
+        });
+      } else {
+        return res.status(200).send(data);
+      }
+    });
+  },
+
+  quantity: (req, res) => {
+    var query;
+    var searchTerm = req.query.searchTerm;
+
+    if (searchTerm) {
+      query = Book.find({
+        $or: [
+          {
+            title: {
+              $regex: searchTerm,
+              $options: "i",
+            },
+          },
+          {
+            author: {
+              $regex: searchTerm,
+              $options: "i",
+            },
+          },
+          {
+            genre: {
+              $regex: searchTerm,
+              $options: "i",
+            },
+          },
+          {
+            subgenre: {
+              $regex: searchTerm,
+              $options: "i",
+            },
+          },
+          {
+            codNOrder: {
+              $regex: searchTerm,
+              $options: "i",
+            },
+          },
+        ],
       });
+    } else {
+      query = Book.find();
+    }
+    query.countDocuments().exec((err, data) => {
+      if (err) {
+        res.status(400).send({
+          message: "error consultando cantidad de elementos",
+          status: "error",
+        });
+      } else {
+        res.status(200).send({ quantity: data });
+      }
+    });
   },
 };
-
 // columnas
 /* columnas con datos 
      B : titulo

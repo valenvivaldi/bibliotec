@@ -8,9 +8,11 @@ class BookDisplay extends Component {
   searchBarRef = new React.createRef();
   state = {
     books: [],
-    page: 1,
-    pageLength: 50,
+    quantity: 0,
+    page: 0,
+    perPage: 10,
     status: null,
+    search: null,
   };
 
   componentDidMount() {
@@ -19,35 +21,14 @@ class BookDisplay extends Component {
 
   doSearch = (e) => {
     e.preventDefault();
-    console.log(this.searchBarRef.current);
+
     this.searchBooks(this.searchBarRef.current.value);
   };
 
   searchBooks = (searchTerm) => {
-    console.log("searchterm trae lo siguiente" + searchTerm);
-
-    var route;
-    if (searchTerm === "") {
-      route = "book";
-    } else {
-      route = "book/search/" + searchTerm;
-    }
-    console.log("axios va a hacer get en " + Global.url + route);
-    this.setState({ status: "loading" }, () => {
-      axios
-        .get(Global.url + route)
-        .then((res) => {
-          console.log("recibio el get! el primer libro es " + res.data);
-          this.setState({
-            books: res.data,
-            page: 1,
-            status: "success",
-          });
-        })
-        .catch((err) => {
-          this.setState({ status: "error" });
-          console.log(err);
-        });
+    this.setState({ page: 0, search: this.searchBarRef.current.value }, () => {
+      this.updateQuantity(this.state.search);
+      this.getBooks(this.state.search);
     });
   };
 
@@ -60,9 +41,48 @@ class BookDisplay extends Component {
     this.changePage(-1);
   };
 
+  updateQuantity = (s) => {
+    axios.get(Global.url + "book/quantity?searchTerm=" + s).then((res) => {
+      this.setState({ quantity: res.data.quantity });
+    });
+  };
+
   changePage(i) {
-    this.setState({ page: this.state.page + i });
+    this.setState({ page: this.state.page + i }, () => {
+      this.getBooks();
+    });
   }
+  getBooks = () => {
+    var searchTerm = this.state.search;
+    var route;
+    if (searchTerm === "") {
+      route = "book";
+    } else {
+      route = "book/search/" + searchTerm;
+    }
+
+    this.setState({ status: "loading" }, () => {
+      axios
+        .get(
+          Global.url +
+            route +
+            "/?page=" +
+            this.state.page +
+            "&perPage=" +
+            this.state.perPage
+        )
+        .then((res) => {
+          this.setState({
+            books: res.data,
+            status: "success",
+          });
+        })
+        .catch((err) => {
+          this.setState({ status: "error" });
+          console.log(err);
+        });
+    });
+  };
 
   render() {
     return (
@@ -82,20 +102,17 @@ class BookDisplay extends Component {
           <img src={loading} alt="Cargando.." className="  loadingGif"></img>
         )}
 
-        {this.state.books.length ==0 &&this.state.status==='success' && <p>No hay resultados correspondientes a esa busqueda.</p>}
+        {this.state.quantity === 0 && this.state.status === "success" && (
+          <p>No hay resultados correspondientes a esa busqueda.</p>
+        )}
         <section className="bookList">
-          {this.state.books
-            .slice(
-              this.state.pageLength * (this.state.page - 1),
-              this.state.pageLength * this.state.page
-            )
-            .map((book, i) => {
-              return <Book key={book.idOld} data={book} />;
-            })}
+          {this.state.books.map((book, i) => {
+            return <Book key={book.idOld} data={book} />;
+          })}
         </section>
 
         <div className="pageBar">
-          {this.state.page > 1 && (
+          {this.state.page > 0 && (
             <input
               type="button"
               className="pageButtons"
@@ -104,8 +121,9 @@ class BookDisplay extends Component {
               onClick={this.backPage}
             ></input>
           )}
-          {this.state.page * this.state.pageLength <
-            this.state.books.length && (
+
+          {(this.state.page + 1) * this.state.perPage <=
+            this.state.quantity && (
             <input
               type="button"
               className="pageButtons"
