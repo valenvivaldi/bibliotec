@@ -1,20 +1,42 @@
-'use strict'
-var mongoose = require('mongoose');
+"use strict";
+var mongoose = require("mongoose");
+var bcrypt = require("bcryptjs");
+
+
 var Schema = mongoose.Schema;
 
-var UserSchema = Schema({
-    username:String,
-    password:String,
-    dni:Number,
+var UserSchema = Schema(
+  {
+    dni: {
+      type: Number
+    },
 
-    readed:[{type:mongoose.Schema.Types.ObjectId,ref:'Book'}], //year of publication
-    pendient:[{type:mongoose.Schema.Types.ObjectId,ref:'Book'}],
-    
+    password: {
+      type: String,
+      required: true,
+    },
 
-    
-    active: Boolean //
+    readed: [{ type: mongoose.Schema.Types.ObjectId, ref: "Book" }],
+    pendient: [{ type: mongoose.Schema.Types.ObjectId, ref: "Book" }],
+    role: Number,
 
+    active: Boolean, //
+  },
+  { timestamps: true }
+);
+
+
+//middleware del modelo
+UserSchema.pre("save", function () {
+  console.log('ejecuto presave');
+  if (this.isModified("password")) {
+    this.password = bcrypt.hashSync(this.password, 10);
+  }
 });
 
+UserSchema.methods.comparePasswords = function (password) {
+  return bcrypt.compareSync(password, this.password);
+};
 
-module.exports= mongoose.model('User',UserSchema);
+
+module.exports = mongoose.model("User", UserSchema);
