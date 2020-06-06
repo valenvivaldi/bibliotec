@@ -11,11 +11,9 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <div className="center">
-        <div className="content">
-        <Router />
-        </div>
-      </div>
+
+      <Router />
+
       <Footer />
     </div>
   );

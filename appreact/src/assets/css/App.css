@@ -160,6 +160,31 @@ body {
   border-width: 1px;
   height: 150px;
 }
+.formLogin {
+  width: 40%;
+  margin: auto;
+  margin-top: 10px;
+  padding-top: 3%;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.inputLogin {
+  height: 26px;
+  padding: 0px;
+  display: block;
+  margin: auto;
+ margin-top: 5px; 
+}
+
+.labelLogin {
+  display: block;
+  margin-top: 5px;
+}
+.submitLogin{
+  margin-top: 5px;
+}
+
 
 .inputExcelFile {
   /* background-color: blue; */
@@ -179,12 +204,12 @@ body {
   margin-top: 40px;
 }
 .bookData {
-    background: rgba(255, 255, 255, 0.2);
-    margin: 4px auto;
-    width: 60%;
-    height: 70px;
-    margin-top: 5px;
-    padding-top: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 4px auto;
+  width: 60%;
+  height: 70px;
+  margin-top: 5px;
+  padding-top: 1px;
 }
 .booktitle,
 .bookauthor,
@@ -192,7 +217,7 @@ body {
   display: block;
   margin-top: 5px;
 }
-.booktitle{
+.booktitle {
   font-weight: bold;
 }
 .bookpublisher {
