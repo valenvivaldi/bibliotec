@@ -84,9 +84,13 @@ body {
   /* background-color: deeppink; */
 }
 
+.red-text{
+  color:red
+}
+
 #menu ul {
   float: right;
-  width: 53%;
+  width: 72%;
 
   line-height: 36px;
   /* background-color: fuchsia; */
