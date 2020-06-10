@@ -13,6 +13,7 @@ class BookDisplay extends Component {
     perPage: 10,
     status: null,
     search: null,
+    readed: [],
   };
 
   componentDidMount() {
@@ -26,6 +27,21 @@ class BookDisplay extends Component {
   };
 
   searchBooks = (searchTerm) => {
+    axios
+      .get(
+        Global.url +'user/getReaded?dni='+this.props.id
+      )
+      .then((res) => {
+        this.setState({
+          readed:res
+          
+        });
+      })
+      .catch((err) => {
+        this.setState({ status: "error" });
+        console.log(err);
+      });
+
     this.setState({ page: 0, search: this.searchBarRef.current.value }, () => {
       this.updateQuantity(this.state.search);
       this.getBooks(this.state.search);
@@ -107,7 +123,7 @@ class BookDisplay extends Component {
         )}
         <section className="bookList">
           {this.state.books.map((book, i) => {
-            return <Book key={book.idOld} data={book} />;
+            return <Book key={book._id} data={book} readed={this.state.readed.find(element => element === book._id)} />;
           })}
         </section>
 

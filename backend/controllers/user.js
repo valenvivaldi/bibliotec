@@ -97,6 +97,22 @@ var controller = {
 
    // res.status(200).send("test login");
   },
+
+  getReaded: (req,res)=>{
+    //res.status(200).send()
+    
+      User.findById(req.query.id).then((result)=>{
+        res.status(200).send(result.readed);
+      }
+
+      ).catch(()=>{
+        res.status(400).send({status:'error'});
+      }
+      )
+
+  }
+
+
 };
 
 module.exports = controller;

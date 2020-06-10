@@ -84,8 +84,8 @@ body {
   /* background-color: deeppink; */
 }
 
-.red-text{
-  color:red
+.red-text {
+  color: red;
 }
 
 #menu ul {
@@ -178,17 +178,16 @@ body {
   padding: 0px;
   display: block;
   margin: auto;
- margin-top: 5px; 
+  margin-top: 5px;
 }
 
 .labelLogin {
   display: block;
   margin-top: 5px;
 }
-.submitLogin{
+.submitLogin {
   margin-top: 5px;
 }
-
 
 .inputExcelFile {
   /* background-color: blue; */
@@ -228,6 +227,9 @@ body {
   color: rgba(0, 0, 0, 0.6);
 }
 
+.readedButton{
+  float: right;
+}
 .pageButtons {
   margin: 20px 5px;
   height: 25px;
@@ -238,13 +240,13 @@ body {
   width: 60px;
 }
 
-.logoutButton{
+.logoutButton {
   height: 20px;
   width: 36px;
   font-size: 10px;
   margin-left: 5px;
 }
-.userLi{
+.userLi {
   /* background-color: red; */
   font-size: 12px;
   width: 50px;
