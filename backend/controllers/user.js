@@ -67,7 +67,8 @@ var controller = {
             // Create JWT Payload
             const payload = {
               id: user.id,
-              name: user.name,
+              dni: user.dni,
+              role:user.role
             };
             // Sign token
             jwt.sign(

@@ -34,17 +34,13 @@ class Header extends Component {
               <li>
                 <a href="#">Ayuda</a>
               </li>
-              {this.props.isAuthenticated ? (
+              {this.props.auth.isAuthenticated ? (
                 <React.Fragment>
-                  <li>
-                    <input type="button" onClick={this.onLogoutClick}>
-                      {this.props.auth.dni}
-                    </input>
-                  </li>
-                  <li>
-                    <input type="button" onClick={this.onLogoutClick}>
-                      CerrarSesion
-                    </input>
+                  <li className='userLi'>
+                    <Link>{this.props.auth.user.dni}</Link>
+                    <button className='logoutButton' type="button" onClick={this.onLogoutClick}>
+                      Salir
+                    </button>
                   </li>
                 </React.Fragment>
               ) : (

@@ -19,12 +19,13 @@ class Login extends Component {
   }
   state = {};
   onChange = (e) => {
+    //console.log(e);
     this.setState({ [e.target.id]: e.target.value });
   };
   onSubmit = (e) => {
     e.preventDefault();
     const userData = {
-      email: this.state.email,
+      dni: this.state.dni,
       password: this.state.password,
     };
     this.props.loginUser(userData); // since we handle the redirect within our component, we don't need to pass in this.props.history as a parameter
@@ -47,6 +48,7 @@ class Login extends Component {
           <input
             type="text"
             name="dni"
+            id='dni'
             className="inputLogin"
             onChange={this.onChange}
           ></input>
@@ -56,6 +58,7 @@ class Login extends Component {
           <input
             type="password"
             name="password"
+            id='password'
             className="inputLogin"
             onChange={this.onChange}
           ></input>
