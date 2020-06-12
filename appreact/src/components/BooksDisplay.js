@@ -4,6 +4,13 @@ import Global from "../Global";
 import Book from "./Book";
 import loading from "../assets/images/loading.gif";
 
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+
+var _ = require("lodash");
+
+
+
 class BookDisplay extends Component {
   searchBarRef = new React.createRef();
   state = {
@@ -26,22 +33,39 @@ class BookDisplay extends Component {
     this.searchBooks(this.searchBarRef.current.value);
   };
 
-  searchBooks = (searchTerm) => {
+  getReaded = () => {
+    console.log('HACEMOS EL GETREADED');
     axios
-      .get(
-        Global.url +'user/getReaded?dni='+this.props.id
-      )
+      .get(Global.url + "user/getReaded?id=" + this.props.auth.user.id)
       .then((res) => {
-        this.setState({
-          readed:res
-          
-        });
+        // console.log('esta es la red de getreaded '+res);
+        if(res){
+
+          this.setState({
+            readed: res.data,
+          });
+        }
       })
       .catch((err) => {
         this.setState({ status: "error" });
         console.log(err);
       });
+  };
 
+  switchReaded = (bookid) => {
+    axios.post(Global.url + "book/switchReaded", {
+      dni: this.props.auth.user.dni,
+      bookid: bookid,
+    }).then((response)=>{
+      console.log('llega aca')
+      this.getReaded();
+    });
+  };
+
+  searchBooks = (searchTerm) => {
+    if (this.props.auth.isAuthenticated) {
+      this.getReaded();
+    }
     this.setState({ page: 0, search: this.searchBarRef.current.value }, () => {
       this.updateQuantity(this.state.search);
       this.getBooks(this.state.search);
@@ -95,11 +119,21 @@ class BookDisplay extends Component {
         })
         .catch((err) => {
           this.setState({ status: "error" });
-          console.log(err);
+          // console.log(err);
         });
     });
   };
 
+  isReaded(bookid) {
+    // console.log('estoy en isreaded');
+    // console.log(this.state.readed);
+    if (!this.state.readed) {
+      return false;
+    } else {
+      // console.log(this.state.readed);
+      return this.state.readed.indexOf(bookid) >= 0;
+    }
+  }
   render() {
     return (
       <React.Fragment>
@@ -122,8 +156,17 @@ class BookDisplay extends Component {
           <p>No hay resultados correspondientes a esa busqueda.</p>
         )}
         <section className="bookList">
+          
           {this.state.books.map((book, i) => {
-            return <Book key={book._id} data={book} readed={this.state.readed.find(element => element === book._id)} />;
+            let checkreaded = this.isReaded(book._id);
+            return (
+              <Book
+                key={book._id}
+                data={book}
+                isreaded={checkreaded}
+                switchFunc={this.switchReaded}
+              />
+            );
           })}
         </section>
 
@@ -154,4 +197,10 @@ class BookDisplay extends Component {
   }
 }
 
-export default BookDisplay;
+BookDisplay.propTypes = {
+  auth: PropTypes.object.isRequired,
+};
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+export default connect(mapStateToProps)(BookDisplay);
