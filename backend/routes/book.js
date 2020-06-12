@@ -14,6 +14,7 @@ router.get("/", BookController.all);
 router.get("/search/:searchTerm", BookController.search);
 
 router.get("/quantity", BookController.quantity);
+router.post("/switchReaded", BookController.switchReaded);
 
 router.post("/importFromExcel", md_upload, BookController.importFromExcel);
 

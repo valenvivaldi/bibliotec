@@ -1,8 +1,10 @@
 "use strict";
 
 var Book = require("../models/book");
+var User = require("../models/user");
 
 var fs = require("fs");
+const { userInfo } = require("os");
 
 var controller = {
   all: (req, res) => {
@@ -157,6 +159,38 @@ var controller = {
       } else {
         return res.status(200).send(data);
       }
+    });
+  },
+
+  switchReaded: (req, res) => {
+    console.log("estamos en switch");
+    const dni = req.body.dni;
+    const bookid = req.body.bookid;
+
+    User.findOne({ dni: req.body.dni }).then((result) => {
+      if (result) {
+        console.log('switch! encontro el usuario')
+        if (result.readed.indexOf(bookid) >= 0) {
+          console.log("el elemento "+bookid+" esta en los leidos!");
+          //console.log('el filter deberia dar '+result.readed[0].toString() +' '+bookid.toString()+ 'el === da'+(result.readed[0].toString() ===bookid.toString()));
+          let filtered = result.readed.filter((element) => element.toString() !== bookid.toString());
+          console.log('filtramos y quedo '+filtered);
+          result.readed =filtered;
+        } else {
+          console.log(" el elemento "+bookid+" no esta en los leidos!");
+          result.readed.push( bookid);
+        }
+        console.log('los leidos quedaran asi '+result.readed);
+        result.save().then(res.status(200).send({status:'success'}));
+
+      } else {
+        res
+          .status(200)
+          .send({ status: "error", message: "usuario no encontrado" });
+      }
+    }).catch((err)=>{
+      console.log('error obteniendo el user');
+      console.log(err);
     });
   },
 
