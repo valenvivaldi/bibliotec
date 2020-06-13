@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import Global from "../Global";
+//import Global from "../Global";
 
 import PropTypes from "prop-types";
 import { connect } from "react-redux";

@@ -7,7 +7,7 @@ import loading from "../assets/images/loading.gif";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-var _ = require("lodash");
+
 
 
 

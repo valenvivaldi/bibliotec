@@ -31,9 +31,9 @@ class Header extends Component {
                 {/* <a href="#">Perfil</a> */}
                 <Link to="/uploadExcel">Importar</Link>
               </li>
-              <li>
-                <a href="#">Ayuda</a>
-              </li>
+              {/* <li>
+                <a href="">Ayuda</a>
+              </li> */}
               {this.props.auth.isAuthenticated ? (
                 <li className="userLi">
                   <Link>{this.props.auth.user.dni}</Link>

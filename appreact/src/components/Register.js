@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import axios from "axios";
-import Global from "../Global";
-import { Link, withRouter } from "react-router-dom";
+// import axios from "axios";
+// import Global from "../Global";
+import {  withRouter } from "react-router-dom";
 
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
