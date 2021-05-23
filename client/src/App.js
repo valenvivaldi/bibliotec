@@ -4,21 +4,26 @@ import MyContent from "./components/MyContent";
 
 import { Layout } from "antd";
 import MyHeader from "./components/MyHeader";
-import { Router } from "react-router";
+import { BrowserRouter as Router } from "react-router-dom";
 
-const { Header, Footer, Sider, Content } = Layout;
+
+
+
+// Initialize Firebase
+
+const { Footer } = Layout;
 
 function App() {
   return (
- 
-      <div className="App">
+    <div className="App">
+      <Router>
         <Layout>
           <MyHeader />
           <MyContent />
           <Footer>Valentin Vivaldi - 2021</Footer>
         </Layout>
-      </div>
-    
+      </Router>
+    </div>
   );
 }
 

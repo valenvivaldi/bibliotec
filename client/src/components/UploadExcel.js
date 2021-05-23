@@ -1,66 +1,35 @@
-import React, { Component } from "react";
-import axios from "axios";
-import Global from "../Global";
-class UploadExcel extends Component {
-  url = Global.url;
-  state = {
-    selectedFile: null,
-    status: null,
-    message: null,
-  };
+import { Button, Upload, message, Input } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import * as XLSX from "xlsx";
+import { useFilePicker } from "react-sage";
 
-  submitFile = (e) => {
-    e.preventDefault();
-    console.log("submit");
-    if (this.state.status === "selected" ) {
-      
-      this.setState({status:'loading'},()=>{
+const UploadExcel = () => {
+  const [file, setFile] = useState();
+  const { files, onClick, errors, HiddenFileInput } = useFilePicker({});
 
-        const formData = new FormData();
-        formData.append(
-          "file0",
-          this.state.selectedFile,
-          this.state.selectedFile.name
-          );
-          
-          axios.post(this.url + "book/importFromExcel", formData).then((res) => {
-            console.log(res);
-            this.setState(res.data);
-          },(err)=>{
-            this.setState({status:'error',message:'El archivo enviado no es valido'})
-          });
-        });
-        }
+  useEffect(() => {
+    console.log(file);
+  }, [file]);
 
-  };
+  const processExcel = () => {};
+  useEffect(() => {
+    if (files[0]) {
+      let reader = new FileReader();
+      reader.readAsArrayBuffer(files[0]);
+      var workbook = XLSX.read();
+      console.log(workbook);
+    }
+  }, [files]);
 
-  fileChange = (event) => {
-    console.log(event.target.files);
-    this.setState({
-      selectedFile: event.target.files[0],
-      status: "selected",
-    });
-  };
-  render() {
-    return (
-      <React.Fragment>
-        <form className="formUpload" onSubmit={this.submitFile}>
-          {/* Haga click para seleccionar un archivo o arrastrelo hasta aquí. */}
-          <input
-            type="file"
-            className="inputExcelFile"
-            id="excelFile"
-            name="file0"
-            multiple="false"
-            accept=".xls"
-            onChange={this.fileChange}
-          ></input>
-          <input type="submit"></input>
-        </form>
-        {this.state.status === "loading" && <p className='pmessage'> CARGANDO ARCHIVO...</p>}
-        {this.state.message && <p className="pmessage">{this.state.message}</p>}
-      </React.Fragment>
-    );
-  }
-}
+  return (
+    <>
+      <Button onClick={onClick} icon={<UploadOutlined />}>
+        Click to Upload
+      </Button>
+      <HiddenFileInput accept=".xls" multiple={false} />
+    </>
+  );
+};
+
 export default UploadExcel;
