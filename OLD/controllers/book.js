@@ -259,46 +259,6 @@ var controller = {
      H: autores
      J: codigo 
  */
-function extractNewBooks(workbook, lastID) {
-  var start_line = 7; //fila donde se encuentra el elemento de id 0
-  var books = [];
 
-  var actual_line = start_line;
-
-  var sheet = workbook.Sheets["Hoja1"];
-
-  while (sheet["C" + actual_line] && sheet["C" + actual_line].v <= lastID) {
-    actual_line++;
-  }
-
-  console.log("se empieza a registrar desde la linea " + actual_line);
-
-  var newBooks = [];
-  while (sheet["C" + actual_line]) {
-    //mientras tenga un oldid
-
-    if (sheet["B" + actual_line]) {
-      // si tiene titulo
-
-      newBooks.push(parseBookAtLine(sheet, actual_line));
-    }
-    actual_line++;
-  }
-
-  return newBooks;
-}
-
-function parseBookAtLine(sheet, line) {
-  return {
-    title: sheet["B" + line] ? sheet["B" + line].v : undefined,
-    author: sheet["H" + line] ? sheet["H" + line].v : undefined,
-    publisher: sheet["D" + line] ? sheet["D" + line].v : undefined,
-    genre: sheet["E" + line] ? sheet["E" + line].v : undefined,
-    subgenre: sheet["F" + line] ? sheet["F" + line].v : undefined,
-    type: sheet["G" + line] ? sheet["G" + line].v : undefined,
-    codNOrder: sheet["J" + line] ? sheet["J" + line].v : undefined,
-    idOld: sheet["C" + line] ? sheet["C" + line].v : undefined,
-  };
-}
 
 module.exports = controller;

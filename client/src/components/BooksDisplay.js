@@ -7,18 +7,48 @@ import { db } from "../firebase";
 
 const BookDisplay = () => {
   const [bookList, setBookList] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    db.collection("books")
+    let books = localStorage.getItem("books");
+    if(books){
+      //exist books in localstorage, is current?
+      db.collection("updatesBookList")
+
+    }else{
+      loadFromFirebase()
+
+    }
+
+
+
+  }, []);
+
+function loadFromFirebase (){
+  db.collection("books")
       .get()
       .then((querySnapshot) => {
         console.log("obtuve de firebase lo siguietne");
         console.log(querySnapshot.docs);
+        localStorage.setItem()
         setBookList(querySnapshot.docs);
+        localStorage.setItem("books",querySnapshot.docs);
+        setSearchResults(querySnapshot.docs.slice(0, 19));
       });
-  }, []);
+}
 
-  function doSearch(value) {}
+  function doSearch(value) {
+    setSearchResults(
+      bookList.filter((book) => {
+        return (
+          book.author?.toLowerCase().includes(value.toLowerCase()) ||
+          book.publisher?.toLowerCase().includes(value.toLowerCase()) ||
+          book.title?.toLowerCase().includes(value.toLowerCase()) ||
+          book.type?.toLowerCase().includes(value.toLowerCase())
+        );
+      })
+    );
+  }
 
   return (
     <>
@@ -40,8 +70,9 @@ const BookDisplay = () => {
       <Row>
         <Col span={12} offset={6}>
           <List
-            locale={{ emptyText: "No se encontraron resultados :(" }}
-            dataSource={bookList}
+            locale={{ 
+              emptyText: "No se encontraron resultados :(" }}
+            dataSource={searchResults}
             renderItem={(book, index) => {
               return <Book bookData={book.data()} />;
             }}

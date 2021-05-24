@@ -12,7 +12,7 @@ class MyContent extends Component {
       //rutas y paginas
       <Content
         style={{
-          backgroundColor: "rgb(108, 240, 196)",
+                    backgroundColor: "rgb(108, 240, 196)",
         }}
       >
         <Switch>

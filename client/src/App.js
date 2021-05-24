@@ -6,9 +6,6 @@ import { Layout } from "antd";
 import MyHeader from "./components/MyHeader";
 import { BrowserRouter as Router } from "react-router-dom";
 
-
-
-
 // Initialize Firebase
 
 const { Footer } = Layout;
@@ -17,7 +14,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Layout>
+        <Layout style={{ height: "100vh" }}>
           <MyHeader />
           <MyContent />
           <Footer>Valentin Vivaldi - 2021</Footer>

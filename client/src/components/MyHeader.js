@@ -24,14 +24,14 @@ const MyHeader = () => {
         <Menu.Item key="2">
           <Link to="/uploadExcel">Importar</Link>
         </Menu.Item>
-        <Menu.Item key="3">
-          <Link to="/register">Register</Link>
+        <Menu.Item  key="3">
+          <Link to="/">Register</Link>
         </Menu.Item>
         <Menu.Item key="4">
-          <Link>ete sech</Link>
+          <Link to="/">ete sech</Link>
         </Menu.Item>
         <Menu.Item key="5">
-          <Link to="/login">Login</Link>
+          <Link to="/">Login</Link>
         </Menu.Item>
       </Menu>
     </Header>
