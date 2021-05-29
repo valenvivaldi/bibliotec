@@ -18,8 +18,6 @@ const BookDisplay = () => {
       loadFromFirebase();
     
     }else{
-      console.log("asd");
-      console.log(books);
       setBookList(books);
       setSearchResults(books.slice(0,19));
 
