@@ -1,8 +1,8 @@
-import { Spin, Button, Upload, message, Input, Row, Col } from "antd";
+import { Spin, Button, Input, Row, Col } from "antd";
 import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
-import { useFilePicker } from "react-sage";
+
 import { db } from "../firebase";
 
 const UploadExcel = () => {
@@ -25,7 +25,6 @@ const UploadExcel = () => {
         var data = new Uint8Array(e.target.result);
 
         var workbook = XLSX.read(data, { type: "array" });
-        console.log(workbook);
         calcLastId().then((res) => {
           console.log("calculo el ultimo oldId");
           let lastId = 0;
@@ -64,7 +63,6 @@ const UploadExcel = () => {
 
   function extractNewBooks(workbook, lastID) {
     var start_line = 7; //fila donde se encuentra el elemento de id 0
-    var books = [];
     var actual_line = start_line;
     var sheet = workbook.Sheets["Hoja1"];
     while (sheet["C" + actual_line] && sheet["C" + actual_line].v <= lastID) {
